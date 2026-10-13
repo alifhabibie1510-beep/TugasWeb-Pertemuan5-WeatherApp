@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuaca | Weather App</title>
+  <meta name="description" content="Aplikasi cuaca bergaya iOS dengan data OpenWeatherMap: suhu, kelembaban, angin, prakiraan per 3 jam, dan prakiraan 5 hari.">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body data-theme="partly-day" data-time="day">
+
+  <!-- Latar belakang animasi (dekoratif, disembunyikan dari screen reader) -->
+  <div class="sky" aria-hidden="true">
+    <div class="sky__sun"></div>
+    <div class="sky__stars" id="stars"></div>
+    <div class="sky__clouds">
+      <div class="cloud cloud--1"></div>
+      <div class="cloud cloud--2"></div>
+      <div class="cloud cloud--3"></div>
+      <div class="cloud cloud--4"></div>
+      <div class="cloud cloud--5"></div>
+    </div>
+    <div class="sky__fog"></div>
+    <canvas class="sky__canvas" id="fx-canvas"></canvas>
+    <div class="sky__flash"></div>
+  </div>
+
+  <div class="app">
+
+    <!-- ============ PENCARIAN + SATUAN SUHU ============ -->
+    <header class="toolbar">
+      <form class="search" id="search-form" role="search">
+        <label class="visually-hidden" for="city-input">Nama kota</label>
+        <div class="search__field">
+          <svg class="search__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input class="search__input" id="city-input" name="city" type="search"
+                 placeholder="Cari kota, contoh: Medan" autocomplete="off" maxlength="60">
+        </div>
+        <button class="search__button" id="search-button" type="submit">Cari</button>
+      </form>
+
+      <div class="unit-toggle" role="group" aria-label="Satuan suhu">
+        <button class="unit-toggle__button" type="button" data-unit="C" aria-pressed="true">&deg;C</button>
+        <button class="unit-toggle__button" type="button" data-unit="F" aria-pressed="false">&deg;F</button>
+      </div>
+    </header>
+
+    <!-- Riwayat pencarian (disimpan di LocalStorage) -->
+    <section class="history" id="history-section" aria-label="Riwayat pencarian" hidden>
+      <ul class="history__list" id="history-list"></ul>
+      <button class="history__clear" id="history-clear" type="button">Hapus riwayat</button>
+    </section>
+
+    <!-- Pesan error dan status loading -->
+    <p class="alert" id="error" role="alert" hidden></p>
+    <p class="loading" id="loading" role="status" hidden>
+      <span class="loading__spinner" aria-hidden="true"></span>
+      <span>Memuat data cuaca&hellip;</span>
+    </p>
+
+    <!-- ============ KONTEN CUACA ============ -->
+    <main class="weather" id="weather" aria-busy="false" hidden>
+
+      <section class="current" aria-labelledby="city-name">
+        <h1 class="current__city" id="city-name"></h1>
+        <p class="current__country" id="country"></p>
+        <p class="current__temp" id="temp"></p>
+        <p class="current__summary" id="summary"></p>
+        <p class="current__range" id="range"></p>
+      </section>
+
+      <section class="card" aria-labelledby="hourly-title">
+        <h2 class="card__title" id="hourly-title">Prakiraan per 3 jam</h2>
+        <div class="hourly__scroller" tabindex="0" role="region" aria-label="Daftar prakiraan per 3 jam, geser ke samping">
+          <ol class="hourly__list" id="hourly-list"></ol>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="daily-title">
+        <h2 class="card__title" id="daily-title">Prakiraan 5 hari</h2>
+        <ul class="daily__list" id="daily-list"></ul>
+      </section>
+
+      <section aria-labelledby="details-title">
+        <h2 class="visually-hidden" id="details-title">Detail cuaca</h2>
+        <ul class="details" id="details-list"></ul>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p id="updated"></p>
+      <p>
+        Data cuaca dari
+        <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a>.
+        Tugas Rutin 5, Pemrograman Web, UNIMED.
+      </p>
+    </footer>
+
+  </div>
+</body>
+</html>
